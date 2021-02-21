@@ -25,6 +25,8 @@ ADD app /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup && chown -R appuser:appgroup /app
 USER appuser
 
+RUN chmod 755 /app/healthcheck.sh
+
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 \
     CMD ["/bin/sh", "-c", "/app/healthcheck.sh"]
 
