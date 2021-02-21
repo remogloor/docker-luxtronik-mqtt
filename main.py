@@ -14,7 +14,7 @@ LOOP_SLEEP = 10
 DEBUG = 0
 
 
-class WpMqtt(Daemon):
+class WpMqtt():
     def init(self, logger):
         self.luxtronik_hostname = os.environ.get('luxtronik_hostname','')
         self.luxtronik_port = os.environ.get('luxtronik_port','')
