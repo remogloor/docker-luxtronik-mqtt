@@ -16,7 +16,7 @@ DEBUG = 0
 
 
 class WpMqtt():
-    def init(self, logger):
+    def init(self, logger, statuslogger):
         self.luxtronik_hostname = os.environ.get('luxtronik_hostname','')
         self.luxtronik_port = os.environ.get('luxtronik_port','')
         self.luxtronik_login = "LOGIN;" + os.environ.get('luxtronik_pin','')
@@ -39,14 +39,19 @@ class WpMqtt():
             self.mqtt_auth = None
 
         self.logger = logger
+        self.statuslogger = statuslogger
+        
         logger.info("initialized")
+        statuslogger.info("initialized")
 
 
     def run(self):
         self.logger.info("running")
+        self.statuslogger.info("running")
+        
         while True:
             try:
-                self.logger.info("loop")
+                self.statuslogger.info("loop")
                 self.msgs = []
                 asyncio.get_event_loop().run_until_complete(self.getWpData())
             except Exception as err:
@@ -141,9 +146,16 @@ handler = logging.handlers.RotatingFileHandler("/log/wp-mqtt.log", maxBytes=1000
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+statuslogger = logging.getLogger("status")
+statuslogger.level = logging.INFO
+statushandler = logging.handlers.RotatingFileHandler("/log/wp-mqtt-status.log", maxBytes=1000000, backupCount=2)
+statushandler.setFormatter(formatter)
+statuslogger.addHandler(statushandler)
+
 
 # Create daemon object.
 d = WpMqtt()
-d.init(logger)
+d.init(logger, statuslogger)
 d.logger = logger
+d.statuslogger = statuslogger
 d.run()
