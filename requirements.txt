@@ -1,0 +1,6 @@
+paho-mqtt
+configparser
+pytz
+requests
+asyncio
+websockets
