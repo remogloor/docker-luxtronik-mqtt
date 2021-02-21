@@ -50,9 +50,6 @@ class WpMqtt():
                 self.msgs = []
                 asyncio.get_event_loop().run_until_complete(self.getWpData())
             except Exception as err:
-                if DEBUG:
-                    raise
-                else:
                     self.logger.error(f"Error while processing item: {self.lastItem}\n{err}\n")
             finally:
                 sleep(LOOP_SLEEP)
